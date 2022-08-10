@@ -16,6 +16,9 @@
 
       </tbody>
     </table>
+    <h2>Nueva tarea</h2>
+    <input type="text" name="text" value="">
+    <button onclick="save(event)">Enviar</button>
     <script type="text/javascript">
       let table = document.getElementById('notes');
       fetch('http://localhost:3000/notes')
@@ -23,6 +26,7 @@
         .then(data => {
           for (let note of data) {
             let row = document.createElement('tr');
+            delete note.__v;
             for (let key in note) {
               let cell = document.createElement('td');
               cell.textContent = note[key];
@@ -31,6 +35,21 @@
             table.append(row);
           }
         })
+      function save(e) {
+        console.log(document.body.children[3].value);
+        let data = {
+          text: document.body.children[3].value
+        };
+        fetch('http://localhost:3000/notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(res => res.json())
+          .then(data => console.log(data));
+      }
     </script>
   </body>
 </html>
