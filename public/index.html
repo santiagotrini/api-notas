@@ -21,7 +21,7 @@
     <button onclick="save(event)">Enviar</button>
     <script type="text/javascript">
       let table = document.getElementById('notes');
-      fetch('http://localhost:3000/notes')
+      fetch('/notes')
         .then(res => res.json())
         .then(data => {
           for (let note of data) {
@@ -40,7 +40,7 @@
         let data = {
           text: document.body.children[3].value
         };
-        fetch('http://localhost:3000/notes', {
+        fetch('/notes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
