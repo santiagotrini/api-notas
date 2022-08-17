@@ -1,5 +1,6 @@
 // imports
 import express from 'express';
+import morgan from 'morgan';
 import mongoose from 'mongoose';
 // config vars
 const PORT = process.env.PORT || 3000;
@@ -9,13 +10,21 @@ mongoose.connect(DB)
   .then(() => console.log('DB conectada'))
   .catch(err => console.log(err));
 
+const QuestionSchema = new mongoose.Schema({
+  text: String,
+  answers: [String],
+  correctAnswer: Number
+});
+const Question = mongoose.model('Question', QuestionSchema);
+
+
 const NoteSchema = new mongoose.Schema({
   text: String,
   done: { type: Boolean, default: false }
 });
 const Note = mongoose.model('Note', NoteSchema);
 
-const notes = [];
+// const notes = [];
 // base de datos de mentira
 // const notes = [
 //   {
@@ -42,6 +51,16 @@ const notes = [];
 
 
 const app = express();
+// console.log(typeof app);
+// middleware
+const grassi = (req, res, next) => {
+  console.log('ANTEZANA');
+  next();
+};
+
+app.use(grassi);
+app.use(morgan('dev'));
+
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -51,7 +70,7 @@ app.use(express.json());
 // POST para crear datos
 // PUT para modificar
 // DELETE para borrar
-
+// aca van los endpoints
 // devuelve todas las notas
 app.get('/notes', (req, res) => {
   Note.find((err, notes) => {
